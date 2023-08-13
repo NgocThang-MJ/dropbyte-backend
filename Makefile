@@ -1,7 +1,7 @@
 postgres:
 	docker run --name postgres15.3 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:15.3-alpine
 createdb:
-	docker exec -it postgres15.3 createdb --username=root --owner=root dropbyte
+	docker exec -it dropbyte-db createdb --username=root --owner=root dropbyte
 migrateup:
 	migrate -path db/migration -database "postgres://root:secret@localhost:5432/dropbyte?sslmode=disable" -verbose up
 migratedown:
