@@ -10,13 +10,11 @@ on:
     branches: ["main"]
 
 jobs:
-  deploy:
-    name: Deploy to GitHub Pages
-    # we are not interested in this job
-
-  publish-docker-hub:
+  build:
     name: Publish image to Docker Hub
     runs-on: ubuntu-latest
+    # we are not interested in this job
+
     steps:
       # Checkout to the repository
       - uses: actions/checkout@v2
