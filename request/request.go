@@ -169,8 +169,6 @@ func DownloadFileById(fileId string, authToken string) (resBody []byte, err erro
 	}
 	resBody, err = ioutil.ReadAll(res.Body)
 
-	fmt.Println("Response Body:", string(resBody))
-
 	if err != nil {
 		return
 	}
