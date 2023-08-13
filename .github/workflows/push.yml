@@ -1,0 +1,35 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Build and Push to Docker hub
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    name: Deploy to GitHub Pages
+    # we are not interested in this job
+
+  publish-docker-hub:
+    name: Publish image to Docker Hub
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout to the repository
+      - uses: actions/checkout@v2
+
+      # We need to login so we can later push the image without issues.
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # Builds devopsdockeruh/docker-hy.github.io
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          tags: liquiddev99/dropbyte-backend:latest
