@@ -14,6 +14,7 @@ type Config struct {
 	BucketId             string        `mapstructure:"BUCKET_ID"`
 	ApplicationKey       string        `mapstructure:"APPLICATION_KEY"`
 	SymmetricKey         string        `mapstructure:"SYMMETRIC_KEY"`
+	MigrationUrl         string        `mapstructure:"MIGRATION_URL"`
 	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
 	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
 }

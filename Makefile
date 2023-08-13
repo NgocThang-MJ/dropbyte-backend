@@ -1,11 +1,11 @@
 postgres:
-	docker run --name postgres15 -p 5433:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:15.3-alpine
+	docker run --name postgres15.3 -p 5432:5432 -e POSTGRES_USER=root -e POSTGRES_PASSWORD=secret -d postgres:15.3-alpine
 createdb:
-	docker exec -it postgres15 createdb --username=root --owner=root dropbyte
+	docker exec -it postgres15.3 createdb --username=root --owner=root dropbyte
 migrateup:
-	migrate -path db/migration -database "postgres://root:secret@localhost:5433/dropbyte?sslmode=disable" -verbose up
+	migrate -path db/migration -database "postgres://root:secret@localhost:5432/dropbyte?sslmode=disable" -verbose up
 migratedown:
-	migrate -path db/migration -database "postgres://root:secret@localhost:5433/dropbyte?sslmode=disable" -verbose down
+	migrate -path db/migration -database "postgres://root:secret@localhost:5432/dropbyte?sslmode=disable" -verbose down
 sqlc:
 	sqlc generate
 test:
