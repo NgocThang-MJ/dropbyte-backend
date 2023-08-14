@@ -43,6 +43,7 @@ func (server *Server) setupRouter() {
 		"Accept",
 		"X-Requested-With",
 		"Origin",
+		"Access-Control-Request-Headers",
 	}
 
 	router.Use(cors.New(corsConf))
