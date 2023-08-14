@@ -34,7 +34,7 @@ func (server *Server) setupRouter() {
 	router := gin.Default()
 
 	corsConf := cors.DefaultConfig()
-	corsConf.AllowOrigins = []string{"*"}
+	corsConf.AllowOrigins = []string{server.config.OriginAllowed}
 	corsConf.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"}
 	corsConf.AllowCredentials = true
 	corsConf.AllowHeaders = []string{
