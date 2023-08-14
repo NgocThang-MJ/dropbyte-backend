@@ -49,7 +49,6 @@ func (server *Server) setupRouter() {
 	router.Use(cors.New(corsConf))
 
 	authRoutes := router.Group("/").Use(authMiddleware(server.token))
-	authRoutes.Use(cors.New(corsConf))
 
 	router.POST("/upload", server.guestUploadFile)
 	router.POST("/signup", server.createUser)
