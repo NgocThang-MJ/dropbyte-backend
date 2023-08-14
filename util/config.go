@@ -15,6 +15,7 @@ type Config struct {
 	ApplicationKey       string        `mapstructure:"APPLICATION_KEY"`
 	SymmetricKey         string        `mapstructure:"SYMMETRIC_KEY"`
 	MigrationUrl         string        `mapstructure:"MIGRATION_URL"`
+	Domain               string        `mapstructure:"DOMAIN"`
 	AccessTokenDuration  time.Duration `mapstructure:"ACCESS_TOKEN_DURATION"`
 	RefreshTokenDuration time.Duration `mapstructure:"REFRESH_TOKEN_DURATION"`
 }

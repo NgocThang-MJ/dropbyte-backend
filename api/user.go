@@ -66,7 +66,7 @@ func (server *Server) createUser(ctx *gin.Context) {
 	}
 	token, err := server.token.CreateToken(user.ID, server.config.AccessTokenDuration)
 
-	ctx.SetCookie("access_token", token, 86400, "/", "localhost", true, true)
+	ctx.SetCookie("access_token", token, 86400, "/", server.config.Domain, true, true)
 
 	userResponse := newUserResponse(user, token)
 
@@ -103,7 +103,7 @@ func (server *Server) loginUser(ctx *gin.Context) {
 
 	token, err := server.token.CreateToken(user.ID, server.config.AccessTokenDuration)
 
-	ctx.SetCookie("access_token", token, 86400, "/", "localhost", true, true)
+	ctx.SetCookie("access_token", token, 86400, "/", server.config.Domain, true, true)
 
 	userResponse := newUserResponse(user, token)
 
