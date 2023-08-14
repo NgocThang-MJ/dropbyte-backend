@@ -58,6 +58,7 @@ func (server *Server) setupRouter() {
 	authRoutes.GET("/user/files", server.getFiles)
 	authRoutes.POST("/user/file/delete", server.deleteFileById)
 	authRoutes.GET("/user/file/download", server.downloadFileById)
+	authRoutes.POST("/user/logout", server.logout)
 	server.router = router
 }
 

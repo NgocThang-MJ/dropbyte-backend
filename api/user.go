@@ -109,3 +109,8 @@ func (server *Server) loginUser(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, userResponse)
 }
+
+func (server *Server) logout(ctx *gin.Context) {
+	ctx.SetCookie("access_token", "", -1, "/", server.config.Domain, true, true)
+	ctx.String(http.StatusOK, "OK")
+}
