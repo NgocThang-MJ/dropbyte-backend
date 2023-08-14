@@ -35,9 +35,15 @@ func (server *Server) setupRouter() {
 
 	corsConf := cors.DefaultConfig()
 	corsConf.AllowOrigins = []string{server.config.OriginAllowed}
-	corsConf.AllowMethods = []string{"GET", "POST", "PUT", "DELETE"}
+	corsConf.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD"}
 	corsConf.AllowCredentials = true
-	corsConf.AllowHeaders = []string{"Content-Type", "Authorization", "Accept", "X-Requested-With"}
+	corsConf.AllowHeaders = []string{
+		"Content-Type",
+		"Authorization",
+		"Accept",
+		"X-Requested-With",
+		"Origin",
+	}
 
 	router.Use(cors.New(corsConf))
 
