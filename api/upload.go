@@ -14,7 +14,6 @@ import (
 	"github.com/kurin/blazer/b2"
 
 	db "github.com/liquiddev99/dropbyte-backend/db/sqlc"
-	"github.com/liquiddev99/dropbyte-backend/request"
 	"github.com/liquiddev99/dropbyte-backend/token"
 )
 
@@ -57,30 +56,10 @@ func (server *Server) guestUploadFile(ctx *gin.Context) {
 	}
 	defer openedHeader.Close()
 
-	// Get Authorization Token
-	authResponse, err := request.AuthorizeAccount(
-		server.config.B2ApplicationKeyId,
-		server.config.B2ApplicationKey,
-	)
-	if err != nil {
-		ctx.JSON(authResponse.StatusCode, responseError(err))
-		return
-	}
-
-	// Get Upload Url
-	urlResponse, err := request.GetUploadUrl(
-		server.config.BucketId,
-		authResponse.AuthorizationToken,
-	)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, responseError(err))
-		return
-	}
-
 	// Upload file
 	uploadRequest, err := http.NewRequest(
 		"POST",
-		urlResponse.UploadUrl,
+		server.b2UploadUrl,
 		fileContent,
 	)
 	if err != nil {
@@ -98,7 +77,7 @@ func (server *Server) guestUploadFile(ctx *gin.Context) {
 
 	uploadRequest.Header.Set(
 		"Authorization",
-		urlResponse.AuthorizationToken,
+		server.b2UrlAuthToken,
 	)
 	uploadRequest.Header.Set("X-Bz-File-Name", url.QueryEscape(file.Filename))
 	uploadRequest.Header.Set("Content-Length", fmt.Sprintf("%d", fileContent.Len()))
@@ -176,30 +155,10 @@ func (server *Server) userUploadFile(ctx *gin.Context) {
 	}
 	defer openedHeader.Close()
 
-	// Get Authorization Token
-	authResponse, err := request.AuthorizeAccount(
-		server.config.B2ApplicationKeyId,
-		server.config.B2ApplicationKey,
-	)
-	if err != nil {
-		ctx.JSON(authResponse.StatusCode, responseError(err))
-		return
-	}
-
-	// Get Upload Url
-	urlResponse, err := request.GetUploadUrl(
-		server.config.BucketId,
-		authResponse.AuthorizationToken,
-	)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, responseError(err))
-		return
-	}
-
 	// Upload file
 	uploadRequest, err := http.NewRequest(
 		"POST",
-		urlResponse.UploadUrl,
+		server.b2UploadUrl,
 		fileContent,
 	)
 	if err != nil {
@@ -217,7 +176,7 @@ func (server *Server) userUploadFile(ctx *gin.Context) {
 
 	uploadRequest.Header.Set(
 		"Authorization",
-		urlResponse.AuthorizationToken,
+		server.b2UrlAuthToken,
 	)
 	uploadRequest.Header.Set("X-Bz-File-Name", url.QueryEscape(file.Filename))
 	uploadRequest.Header.Set("Content-Length", fmt.Sprintf("%d", fileContent.Len()))

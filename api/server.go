@@ -2,20 +2,24 @@ package api
 
 import (
 	"log"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
 	db "github.com/liquiddev99/dropbyte-backend/db/sqlc"
+	"github.com/liquiddev99/dropbyte-backend/request"
 	"github.com/liquiddev99/dropbyte-backend/token"
 	"github.com/liquiddev99/dropbyte-backend/util"
 )
 
 type Server struct {
-	config util.Config
-	db     *db.Queries
-	router *gin.Engine
-	token  token.Token
+	config         util.Config
+	db             *db.Queries
+	router         *gin.Engine
+	token          token.Token
+	b2UploadUrl    string
+	b2UrlAuthToken string
 }
 
 func NewServer(config util.Config, db *db.Queries) (*Server, error) {
@@ -28,6 +32,42 @@ func NewServer(config util.Config, db *db.Queries) (*Server, error) {
 	server.setupRouter()
 
 	return server, nil
+}
+
+func (server *Server) scheduledTask() {
+	authResponse, err := request.AuthorizeAccount(
+		server.config.B2ApplicationKeyId,
+		server.config.B2ApplicationKey,
+	)
+	if err != nil {
+		log.Fatal("Failed to authorize b2 account")
+		return
+	}
+
+	urlResponse, err := request.GetUploadUrl(
+		server.config.BucketId,
+		authResponse.AuthorizationToken,
+	)
+	if err != nil {
+		log.Fatal("Failed to get upload url b2")
+		return
+	}
+	server.b2UploadUrl = urlResponse.UploadUrl
+	server.b2UrlAuthToken = urlResponse.AuthorizationToken
+}
+
+func (server *Server) startScheduledTask() {
+	interval := 12 * time.Hour
+	ticker := time.Tick(interval)
+
+	server.scheduledTask()
+
+	go func() {
+		for {
+			<-ticker
+			server.scheduledTask()
+		}
+	}()
 }
 
 func (server *Server) setupRouter() {
@@ -63,6 +103,7 @@ func (server *Server) setupRouter() {
 }
 
 func (server *Server) Start(address string) error {
+	server.startScheduledTask()
 	return server.router.Run(address)
 }
 
