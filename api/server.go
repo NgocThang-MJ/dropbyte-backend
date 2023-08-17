@@ -87,7 +87,7 @@ func (server *Server) setupRouter() {
 	}
 
 	router.Use(cors.New(corsConf))
-	router.MaxMultipartMemory = 300 << 20
+	router.MaxMultipartMemory = 250 * 1024 * 1024
 
 	authRoutes := router.Group("/").Use(authMiddleware(server.token))
 
