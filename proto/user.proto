@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package pb;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/liquiddev99/dropbyte-backend/pb";
+
+message User {
+  string full_name = 1;
+  string email = 2;
+  google.protobuf.Timestamp created_at = 3;
+}

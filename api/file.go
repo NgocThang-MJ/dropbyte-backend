@@ -45,8 +45,8 @@ func (server *Server) downloadFileById(ctx *gin.Context) {
 	}
 
 	authResponse, err := request.AuthorizeAccount(
-		server.config.AccountId,
-		server.config.ApplicationKey,
+		server.config.B2ApplicationKeyId,
+		server.config.B2ApplicationKey,
 	)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, responseError(err))
@@ -70,8 +70,8 @@ func (server *Server) deleteFileById(ctx *gin.Context) {
 	}
 
 	authResponse, err := request.AuthorizeAccount(
-		server.config.AccountId,
-		server.config.ApplicationKey,
+		server.config.B2ApplicationKeyId,
+		server.config.B2ApplicationKey,
 	)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, responseError(err))

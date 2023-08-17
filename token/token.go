@@ -59,7 +59,12 @@ func (maker *Paseto) VerifyToken(token string) (*Payload, error) {
 
 	err := maker.paseto.Decrypt(token, maker.symmetricKey, &payload, nil)
 	if err != nil {
-		return payload, err
+		return nil, err
+	}
+
+	err = payload.CheckExpired()
+	if err != nil {
+		return nil, err
 	}
 
 	return payload, nil

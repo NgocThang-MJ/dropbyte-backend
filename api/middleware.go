@@ -42,13 +42,8 @@ func authMiddleware(token token.Token) gin.HandlerFunc {
 			return
 		}
 
-		err = payload.CheckExpired()
-		if err != nil {
-			ctx.AbortWithStatusJSON(http.StatusBadRequest, responseError(err))
-			return
-		}
-
 		ctx.Set("payload", payload)
+		log.Println(ctx.Request.Method)
 		log.Println("Next")
 		ctx.Next()
 	}

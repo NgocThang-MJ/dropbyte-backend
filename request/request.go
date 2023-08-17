@@ -38,7 +38,7 @@ type responseBodyOnError struct {
 func AuthorizeAccount(accountId string, applicationKey string) (response authResponse, err error) {
 	request, err := http.NewRequest(
 		http.MethodGet,
-		"https://api.backblazeb2.com/b2api/v3/b2_authorize_account",
+		"https://api.backblazeb2.com/b2api/v2/b2_authorize_account",
 		nil,
 	)
 	if err != nil {
@@ -71,7 +71,7 @@ func AuthorizeAccount(accountId string, applicationKey string) (response authRes
 func GetUploadUrl(bucketId string, authToken string) (response urlResponse, err error) {
 	request, err := http.NewRequest(
 		http.MethodGet,
-		"https://api005.backblazeb2.com/b2api/v3/b2_get_upload_url?bucketId="+bucketId,
+		"https://api005.backblazeb2.com/b2api/v2/b2_get_upload_url?bucketId="+bucketId,
 		nil,
 	)
 	if err != nil {

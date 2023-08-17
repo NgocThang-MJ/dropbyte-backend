@@ -7,12 +7,14 @@ import (
 )
 
 type Config struct {
-	ServerAddress        string        `mapstructure:"SERVER_ADDRESS"`
+	HTTPServerAddress    string        `mapstructure:"HTTP_SERVER_ADDRESS"`
+	GRPCServerAddress    string        `mapstructure:"GRPC_SERVER_ADDRESS"`
 	DatabaseUrl          string        `mapstructure:"DATABASE_URL"`
 	OriginAllowed        string        `mapstructure:"ORIGIN_ALLOWED"`
-	AccountId            string        `mapstructure:"ACCOUNT_ID"`
+	B2ApplicationKeyId   string        `mapstructure:"B2_APPLICATION_KEY_ID"`
 	BucketId             string        `mapstructure:"BUCKET_ID"`
-	ApplicationKey       string        `mapstructure:"APPLICATION_KEY"`
+	BucketName           string        `mapstructure:"BUCKET_NAME"`
+	B2ApplicationKey     string        `mapstructure:"B2_APPLICATION_KEY"`
 	SymmetricKey         string        `mapstructure:"SYMMETRIC_KEY"`
 	MigrationUrl         string        `mapstructure:"MIGRATION_URL"`
 	Domain               string        `mapstructure:"DOMAIN"`

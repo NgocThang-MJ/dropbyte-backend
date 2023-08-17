@@ -11,6 +11,7 @@ import (
 	"net/url"
 
 	"github.com/gin-gonic/gin"
+	"github.com/kurin/blazer/b2"
 
 	db "github.com/liquiddev99/dropbyte-backend/db/sqlc"
 	"github.com/liquiddev99/dropbyte-backend/request"
@@ -58,8 +59,8 @@ func (server *Server) guestUploadFile(ctx *gin.Context) {
 
 	// Get Authorization Token
 	authResponse, err := request.AuthorizeAccount(
-		server.config.AccountId,
-		server.config.ApplicationKey,
+		server.config.B2ApplicationKeyId,
+		server.config.B2ApplicationKey,
 	)
 	if err != nil {
 		ctx.JSON(authResponse.StatusCode, responseError(err))
@@ -177,8 +178,8 @@ func (server *Server) userUploadFile(ctx *gin.Context) {
 
 	// Get Authorization Token
 	authResponse, err := request.AuthorizeAccount(
-		server.config.AccountId,
-		server.config.ApplicationKey,
+		server.config.B2ApplicationKeyId,
+		server.config.B2ApplicationKey,
 	)
 	if err != nil {
 		ctx.JSON(authResponse.StatusCode, responseError(err))
@@ -260,4 +261,35 @@ func (server *Server) userUploadFile(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, responseData)
+}
+
+func (server *Server) guestUploadFileB2(ctx *gin.Context) {
+	// Get file information
+	file, err := ctx.FormFile("file")
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, responseError(err))
+		return
+	}
+
+	openedFile, err := file.Open()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, responseError(err))
+		return
+	}
+	defer openedFile.Close()
+
+	//	asdf, err := b2.NewClient(ctx, server.config.B2ApplicationKeyId, server.config.B2ApplicationKey)
+	b2, err := b2.NewClient(ctx, server.config.B2ApplicationKeyId, server.config.B2ApplicationKey)
+	bucket, err := b2.Bucket(ctx, "liquiddev99")
+
+	obj := bucket.Object(file.Filename)
+	w := obj.NewWriter(ctx)
+	if _, err := io.Copy(w, openedFile); err != nil {
+		w.Close()
+		ctx.JSON(http.StatusInternalServerError, responseError(err))
+		return
+	}
+	w.Close()
+
+	ctx.String(http.StatusOK, "Ok")
 }
